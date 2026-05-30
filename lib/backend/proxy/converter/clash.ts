@@ -23,6 +23,25 @@ export class ClashConverter extends BaseConverter {
             .map((node) => this.processNode(node, options))
             .filter(Boolean);
 
+        // 处理重复名称：为重复的节点名称添加序号后缀
+        const nameCount = new Map<string, number>();
+        const nameIndex = new Map<string, number>();
+
+        // 先统计每个名称出现的次数
+        list.forEach((node) => {
+            const count = nameCount.get(node.name) || 0;
+            nameCount.set(node.name, count + 1);
+        });
+
+        // 为重复的节点重命名
+        list.forEach((node) => {
+            if ((nameCount.get(node.name) || 0) > 1) {
+                const index = (nameIndex.get(node.name) || 0) + 1;
+                nameIndex.set(node.name, index);
+                node.name = `${node.name}_${index}`;
+            }
+        });
+
         const config = {
             proxies: list
         };
@@ -118,6 +137,10 @@ export class ClashConverter extends BaseConverter {
                 if (isPresent(node, 'aead')) {
                     if (node.aead) node.alterId = 0;
                     delete node.aead;
+                }
+                // 确保 alterId 有默认值（现代 VMess 通常使用 AEAD，alterId 为 0）
+                if (!isPresent(node, 'alterId')) {
+                    node.alterId = 0;
                 }
                 const vmessCiphers = ['auto', 'aes-128-gcm', 'chacha20-poly1305', 'none', 'zero'];
                 if (node.cipher && !vmessCiphers.includes(node.cipher)) {
