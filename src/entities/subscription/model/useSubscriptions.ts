@@ -106,6 +106,7 @@ export function useSubscriptions(
                             sub.nodeCount = update.nodeCount;
                             if (update.userInfo) sub.userInfo = update.userInfo;
                             sub.status = 'success';
+                            sub.updatedAt = Date.now();
                             successCount++;
                         } else {
                             sub.status = 'error';

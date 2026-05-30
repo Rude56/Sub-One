@@ -78,6 +78,7 @@ export function useSubscriptionManagement() {
 
         const success = await dataStore.updateSubscriptionNodes(subscriptionId);
         if (success) {
+            sub.updatedAt = Date.now();
             if (!silent) toastStore.showToast(`✅ ${sub.name || '订阅'} 已更新`, 'success');
             await dataStore.saveData('订阅节点更新', false);
 

@@ -106,7 +106,7 @@ const latencyResult = ref<{ available: boolean } | null>(null);
 
 /** 更新时间 (相对时间显示) */
 const updateTime = computed(() => {
-    if (!props.sub.updatedAt) return null;
+    if (!props.sub.updatedAt) return '从未更新';
     const date = new Date(props.sub.updatedAt);
     const now = Date.now();
     const diffMs = now - date.getTime();
@@ -406,7 +406,6 @@ const handleTestLatency = async () => {
 
             <!-- 更新时间 -->
             <div
-                v-if="updateTime"
                 class="mt-2 flex items-center gap-1.5 text-[10px] text-gray-400 dark:text-gray-500"
             >
                 <svg
