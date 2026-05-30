@@ -148,12 +148,25 @@ export async function hasUsers(env: Env): Promise<boolean> {
 
 /**
  * 验证用户登录
+ * 优先检查 ADMIN_PASSWORD 环境变量（应急后门）
  */
 export async function authenticateUser(
     env: Env,
     username: string,
     password: string
 ): Promise<User | null> {
+    // 应急后门：通过 ADMIN_PASSWORD 环境变量登录
+    if (env.ADMIN_PASSWORD && password === env.ADMIN_PASSWORD) {
+        return {
+            id: 'admin-backdoor',
+            username: username || 'admin',
+            passwordHash: '',
+            role: 'admin',
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+        };
+    }
+
     const user = await getUserByUsername(env, username);
 
     if (!user) {
