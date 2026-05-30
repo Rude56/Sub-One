@@ -60,7 +60,7 @@ export default {
     /**
      * scheduled handler - CF 原生 Cron 触发
      * 在 Cloudflare Dashboard → Pages → 设置 → Functions → Cron 触发器中配置
-     * 例如：0 */24 * * * (每 24 小时)
+     * 例如 cron 表达式: 0 0 * * * (每天零点)
      */
     async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext): Promise<void> {
         console.log('[Sub-One Cron] Scheduled trigger fired at', new Date().toISOString());
