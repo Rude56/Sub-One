@@ -28,4 +28,4 @@ database_id = "" # 留空，让 Fork 用户自己填写
 # 每 6 小时自动刷新所有订阅的流量/节点信息
 # 无需外部触发器、无需 cronSecret token
 [triggers]
-crons = ["0 */6 * * *"]
+crons = ["0 */24 * * *"]

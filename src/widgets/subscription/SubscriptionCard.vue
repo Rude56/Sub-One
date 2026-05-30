@@ -104,6 +104,23 @@ const trafficColorClass = computed(() => {
 const isTestingLatency = ref(false);
 const latencyResult = ref<{ available: boolean } | null>(null);
 
+/** 更新时间 (相对时间显示) */
+const updateTime = computed(() => {
+    if (!props.sub.updatedAt) return null;
+    const date = new Date(props.sub.updatedAt);
+    const now = Date.now();
+    const diffMs = now - date.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+    const diffHour = Math.floor(diffMs / 3600000);
+    const diffDay = Math.floor(diffMs / 86400000);
+
+    if (diffMin < 1) return '刚刚更新';
+    if (diffMin < 60) return `${diffMin} 分钟前更新`;
+    if (diffHour < 24) return `${diffHour} 小时前更新`;
+    if (diffDay < 7) return `${diffDay} 天前更新`;
+    return date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' 更新';
+});
+
 const handleTestLatency = async () => {
     if (isTestingLatency.value || !props.sub.url) return;
     isTestingLatency.value = true;
@@ -385,6 +402,27 @@ const handleTestLatency = async () => {
                         >
                     </div>
                 </div>
+            </div>
+
+            <!-- 更新时间 -->
+            <div
+                v-if="updateTime"
+                class="mt-2 flex items-center gap-1.5 text-[10px] text-gray-400 dark:text-gray-500"
+            >
+                <svg
+                    class="h-3 w-3 shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                </svg>
+                <span>{{ updateTime }}</span>
             </div>
 
             <!-- 底部控制 -->

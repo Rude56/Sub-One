@@ -118,6 +118,7 @@ export async function handleCronTrigger(env: Env): Promise<Response> {
                     sub.nodeCount = update.nodeCount;
                     hasChanges = true;
                 }
+                sub.updatedAt = Date.now();
                 updatedCount++;
             }
         }

@@ -104,6 +104,9 @@ export type Subscription = SharedSubscription & {
     /** 错误信息 (如果更新失败) */
     errorMsg?: string;
 
+    /** 上次定时更新时间戳 (毫秒) */
+    updatedAt?: number;
+
     [key: string]: unknown;
 };
 
